@@ -28,7 +28,7 @@ int delayStepper = 6000; // Delay between steps (in microseconds)
 bool xMotorState = true; // Current state of X-axis motor
 bool yMotorState = true; // Current state of Y-axis motor
 
-int receivedValue = 21; // Value received over I2C
+int receivedValue = 21; // Value received over I2C. Set initally to 21 to set system to control gantry
 unsigned long currentMicro; // Current microsecond timestamp
 
 void setup() {
@@ -64,33 +64,31 @@ void receiveData(int byteCount) {
 }
 
 void loop() {
-  currentMicro = micros(); // Get the current timestamp
+  currentMicro = micros(); // Get the current time
 
   if (receivedValue == 21) { // Check if system mode needs gantry to be controlled by joystick
-    // Handle right button press
     if (digitalRead(rightButton) == LOW) {
       digitalWrite(dirX, LOW); // Set X and Z directions to move right
       digitalWrite(dirZ, LOW);
       if ((currentMicro - previousMicroX) > delayStepper) {
         previousMicroX = currentMicro; // Update last move time
-        xMotorState = !xMotorState; // Toggle motor state
+        xMotorState = !xMotorState; // Toggle motor pulse type
         digitalWrite(stepX, xMotorState ? HIGH : LOW);
         digitalWrite(stepZ, xMotorState ? HIGH : LOW);
         x -= 1; // Update X position
       }
-    } else if (digitalRead(leftButton) == LOW) { // Handle left button press
+    } else if (digitalRead(leftButton) == LOW) { 
       digitalWrite(dirX, HIGH); // Set X and Z directions to move left
       digitalWrite(dirZ, HIGH);
       if ((currentMicro - previousMicroX) > delayStepper) {
         previousMicroX = currentMicro; // Update last move time
-        xMotorState = !xMotorState; // Toggle motor state
+        xMotorState = !xMotorState; // Toggle motor pulse type
         digitalWrite(stepX, xMotorState ? HIGH : LOW);
         digitalWrite(stepZ, xMotorState ? HIGH : LOW);
         x += 1; // Update X position
       }
     }
 
-    // Handle down button press
     if (digitalRead(downButton) == LOW) {
       digitalWrite(dirY, LOW); // Set Y direction to move downward
       if ((currentMicro - previousMicroY) > delayStepper) {
@@ -99,11 +97,11 @@ void loop() {
         digitalWrite(stepY, yMotorState ? HIGH : LOW);
         y -= 1; // Update Y position
       }
-    } else if (digitalRead(upButton) == LOW) { // Handle up button press
+    } else if (digitalRead(upButton) == LOW) { 
       digitalWrite(dirY, HIGH); // Set Y direction to move upward
       if ((currentMicro - previousMicroY) > delayStepper) {
         previousMicroY = currentMicro; // Update last move time
-        yMotorState = !yMotorState; // Toggle motor state
+        yMotorState = !yMotorState; // Toggle motor pulse type
         digitalWrite(stepY, yMotorState ? HIGH : LOW);
         y += 1; // Update Y position
       }
