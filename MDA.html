@@ -49,7 +49,8 @@
                                     The Gantry is a two-axis system that sits at the top of the housing in a 2ft x 2ft square. 
                                     It is run by 2 stepper motors that each drive a belt system on its respective axis that moves a bracket that then moves the whole system on that axis.
                                      Each axis is driven as close to the weight as possible to avoid creating large moment arms that would require a lot of torque to move. 
-                                     Along with this each axis is also only driven from one side to avoid the issue of perfectly synchronizing 2 motors.
+                                     Initially, the two axes were controlled by one stepper motor to avoid synchronization issues between stepper motors. In the end, we needed to add 
+									 an auxiliary stepper motor on the x-axis to help it move more smoothly.
                                 </p>     
                                 <p>
                                      The x-axis of the gantry runs along 80/20 Aluminum Bars using wheels to stay in the channel of the bars and roll along. 
